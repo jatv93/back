@@ -120,6 +120,16 @@ def invoices(id = None):
 
         return jsonify({"success": "Invoice Register Successfully"}), 200
 
+@app.route("/download/<int:id>", methods=['GET'])
+def download_blob(id):
+    _image = Image.query.get_or_404(id)
+    return send_file(
+        io.BytesIO(_image.blob),
+        attachment_filename=_image.filename,
+        mimetype=_image.mimetype
+    )
+
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
